@@ -1,13 +1,12 @@
 package factory;
 
-import product.Product;
+import model.Product;
+import model.Ring;
 
 public class RingFactory extends ProductFactory {
 
 	@Override
-	public Product CreateProduct(String name, String type, String colour, double price, int carat, int weight) {
-		// TODO Auto-generated method stub
-		return null;
+	public Product createProduct(String name, String type, String colour, double price, int carat, double weight) {
+		return new Ring(name, type, colour, price, carat, weight);
 	}
-
 }

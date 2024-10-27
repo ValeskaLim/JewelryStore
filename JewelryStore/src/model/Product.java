@@ -1,4 +1,4 @@
-package product;
+package model;
 
 public class Product {
 	private String name;
@@ -6,7 +6,16 @@ public class Product {
 	private String colour;
 	private double price;
 	private int carat;
-	private int weight;
+	private double weight;
+	
+	public Product(String name, String type, String colour, double price, int carat, double weight) {
+		this.name = name;
+		this.type = type;
+		this.colour = colour;
+		this.price = price;
+		this.carat = carat;
+		this.weight = weight;
+	}
 	
 	public String getName() {
 		return name;
@@ -48,26 +57,12 @@ public class Product {
 		this.carat = carat;
 	}
 
-	public int getWeight() {
-		return carat;
+	public double getWeight() {
+		return weight;
 	}
 
-	public void setWeight(int weight) {
+	public void setWeight(double weight) {
 		this.weight = weight;
 	}
 	
-	public Product(String name, String type, String colour, double price, int carat, int weight) {
-		super();
-		this.name = name;
-		this.type = type;
-		this.colour = colour;
-		this.price = price;
-		this.carat = carat;
-		this.weight = weight;
-	}
-
-	public Product() {
-		// TODO Auto-generated constructor stub
-	}
-
 }

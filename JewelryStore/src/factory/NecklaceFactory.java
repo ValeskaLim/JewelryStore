@@ -1,13 +1,12 @@
 package factory;
 
-import product.Product;
+import model.Necklace;
+import model.Product;
 
 public class NecklaceFactory extends ProductFactory {
-
+	
 	@Override
-	public Product CreateProduct(String name, String type, String colour, double price, int carat, int weight) {
-		// TODO Auto-generated method stub
-		return null;
+	public Product createProduct(String name, String type, String colour, double price, int carat, double weight) {
+		return new Necklace(name, type, colour, price, carat, weight);
 	}
-
 }
