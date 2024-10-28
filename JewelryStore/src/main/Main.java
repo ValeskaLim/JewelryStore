@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import adapter.CashPaymentAdapter;
+import adapter.CreditPaymentAdapter;
+import adapter.PaymentAdapter;
+import adapter.QRISPaymentAdapter;
 import factory.BraceletFactory;
 import factory.NecklaceFactory;
 import factory.ProductFactory;
@@ -21,48 +25,49 @@ public class Main {
 		String name = scan.nextLine();
 		while(name.length() < 5 || name.length() > 20) {			
 			System.out.print("Name must between 5 - 20 character! : ");
-			String newName = scan.nextLine();
-			name = newName;
+            name = scan.nextLine();
 		}
 		
 		System.out.print("Enter jewelry type (Bracelet / Necklace / Ring) : ");
 		String type = scan.nextLine().toUpperCase();
 		while(!type.equals("BRACELET") && !type.equals("NECKLACE") && !type.equals("RING")) {
 			System.out.print("Invalid type. Choose between (Bracelet / Necklace / Ring) : ");
-			String newType = scan.nextLine().toUpperCase();
-			type = newType;
+            type = scan.nextLine().toUpperCase();
 		}
 		
 		System.out.print("Enter color : ");
 		String color = scan.nextLine();
 		while(color.isEmpty()) {
 			System.out.print("Color can't be empty! : ");
-			String newColor = scan.nextLine();
-			color = newColor;
+            color = scan.nextLine();
 		}
 		
 		System.out.print("Enter jewelry price : ");
 		double price = Double.parseDouble(scan.nextLine());
 		while(price <= 0) {
 			System.out.print("Price must more than 0! : ");
-			double newPrice = Double.parseDouble(scan.nextLine());
-			price = newPrice;
+            price = Double.parseDouble(scan.nextLine());
 		}
 		
 		System.out.print("Enter jewelry carat : ");
 		int carat = Integer.parseInt(scan.nextLine());
 		while(carat <= 0) {
 			System.out.print("Carat must more than 0! : ");
-			int newCarat = Integer.parseInt(scan.nextLine());
-			carat = newCarat;
+            carat = Integer.parseInt(scan.nextLine());
 		}
 		
 		System.out.print("Enter jewelry weight (in grams) : ");
 		double weight = Double.parseDouble(scan.nextLine());
 		while(weight <= 0) {
 			System.out.print("Weight must more than 0! : ");
-			double newWeight = Double.parseDouble(scan.nextLine());
-			weight = newWeight;
+            weight = Double.parseDouble(scan.nextLine());
+		}
+
+		System.out.print("Enter the payment method (Cash / QRIS / Credit) : ");
+		String paymentMethod = scan.nextLine().toUpperCase();
+		while(paymentMethod.isEmpty()) {
+			System.out.print("Payment method cannot be empty! (Cash / QRIS / Credit) : ");
+			paymentMethod = scan.nextLine().toUpperCase();
 		}
 		
 		// Determine type of product
@@ -75,12 +80,21 @@ public class Main {
 			new RingFactory();
 		default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		};
+
+		PaymentAdapter payment = null;
+
+        price = switch (paymentMethod) {
+            case "CASH" -> new CashPaymentAdapter().getPrice(price);
+            case "QRIS" -> new QRISPaymentAdapter().getPrice(price);
+            case "CREDIT" -> new CreditPaymentAdapter().getPrice(price);
+            default -> price;
+        };
 		
 		Product product = factory.createProduct(name, type, color, price, carat, weight);
 		
 		db.addListProduct(product);
 		System.out.println("ITEM SUCCESSFULLY ADDED!");
-		System.out.println("");
+		System.out.println();
 		
 		// Timer wait 3 second
 		try {
@@ -95,7 +109,10 @@ public class Main {
 				
 		if(list.isEmpty()) {
 			System.out.println("No item in the list!");
-			System.out.println("");
+			System.out.print("Enter any key to continue...");
+			scan.nextLine();
+			System.out.println();
+
 			return;
 		}
 		
@@ -109,17 +126,13 @@ public class Main {
 			System.out.println("Weight: " + p.getWeight() + " gram");
 			System.out.println("========================");
 		}
-		
-		// Timer wait 3 second
-		try {
-			TimeUnit.SECONDS.sleep(3);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+
+		System.out.print("Enter any key to continue...");
+        scan.nextLine();
+    }
 	
 	public Main() {
-		Boolean menu = true;
+		boolean menu = true;
 		while(menu) {
 			System.out.println("1. Add a Accessories");
 			System.out.println("2. View all Accessories");
