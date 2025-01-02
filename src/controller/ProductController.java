@@ -39,11 +39,12 @@ public class ProductController {
 	}
 	
 	public ArrayList<Product> getListProducts() {
+		ArrayList<Product> products = new ArrayList<>();
+		
 		try {
 			st = con.getConn().prepareStatement("SELECT * FROM products");
 			rs = st.executeQuery();
-			if(rs.next()) {
-				ArrayList<Product> products = new ArrayList<>();
+			while(rs.next()) {
 				String name = rs.getString("name");
 				String type = rs.getString("type");
 				String colour = rs.getString("colour");
@@ -63,8 +64,8 @@ public class ProductController {
 				}
 				
 				products.add(product);
-				return products;
 			}
+			return products;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
